@@ -1,4 +1,3 @@
-
 var arraySize = 7;
 
 var request = new XMLHttpRequest(); 
@@ -6,8 +5,8 @@ var chart = null, title, rcd_title, rcd_color, rcd_data, rcd_date;
 var username;
 var dat_BPS, dat_Date;
 let dat_HR = [];
-var low_HR = 200, up_HR = 0, low_BPS = 200, up_BPS = 0;
-const csvUrl2 = "https://docs.google.com/spreadsheets/d/1azhjFHceRSeBAMogVSAKg56ciFvxsHt6KbRCcl0vWeM/export?format=csv";
+var low_HR = 20000, up_HR = 0, low_BPS = 20000, up_BPS = 0;
+const csvUrl2 = "https://docs.google.com/spreadsheets/d/1vspmThGg-eyWESmkJni8JHg2cARbj6tuPlPB_9E4INI/export?format=csv";
 const interval2 = 0; //(tần suất cập nhật)
 
 function get_data() {
@@ -20,11 +19,12 @@ function get_data() {
             console.clear(); // Xóa console trước đó
             console.log("Dữ liệu từ Google Sheets:");
             console.table(rows); // Hiển thị dưới dạng bảng (nếu trình duyệt hỗ trợ)
-            low_HR = 200; 
+            low_HR = 20000; 
             up_HR = 0; 
-            low_BPS = 200;
+            low_BPS = 20000;
             up_BPS = 0;
             rows.slice(1).forEach((row, index) => {
+                console.log(index);
                 let type = row[0];  // heartrate/spo2
                 let date = row[1];  // datetime
                 let value = row[2]; // value
@@ -37,13 +37,19 @@ function get_data() {
                     }
                     if (type == "SpO2")
                     {
-                        dat_BPS[index/2] = value;
+                        dat_BPS[index/2 | 0] = value;
                         if (low_BPS>Number(value)) low_BPS=Number(value);
                         if (up_BPS<Number(value)) up_BPS=Number(value);
                     }
-                    dat_Date[index/2] = date;
+                    dat_Date[index/2 | 0] = date;
                 }
+
             });
+            dat_BPS.reverse();
+            dat_HR.reverse();
+            dat_Date.reverse();
+            console.log(dat_BPS);
+            console.log(dat_HR);
             // updateChart(type);
         })
         .catch(error => console.error("Lỗi khi lấy dữ liệu từ Google Sheets:", error));
@@ -51,7 +57,7 @@ function get_data() {
 
 // Gọi hàm lần đầu và lặp lại mỗi 5 giây
 get_data();
-setInterval(get_data, 0);
+setInterval(get_data, interval2);
 
 window.onload = function() {
     var tit2 = document.getElementById("dataChartTitle");
@@ -141,8 +147,8 @@ function updateChart(type) {
 function updateChartData(type){
     switch(type){
         case 'BP_S':
-            title = "SpO2";
-            rcd_title = "SpO2(%)";
+            title = "SpO2 ";
+            rcd_title = "SpO2 (%)";
             rcd_color = "#ff7782";
             rcd_data = dat_BPS;
             console.log(dat_BPS);

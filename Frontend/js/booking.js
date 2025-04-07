@@ -30,7 +30,8 @@ function chosenDoctor(){
 function showMeetings(){
     let patientId = localStorage.getItem('userId');
     fetch(`/booking?patientId=${encodeURIComponent(patientId)}`,{
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     }
     ).then(response => response.json())
     .then(data => {
@@ -83,6 +84,7 @@ function createAppointment(){
             fetch('/booking',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
                 body: JSON.stringify({patientId,doctorId,date })
             })
             .then(response => response.json())

@@ -2,7 +2,8 @@ let meetingId = '';
 function showMeetings(){
     let doctorId = localStorage.getItem('userId');
     fetch(`/booking_doctor?doctorId=${encodeURIComponent(doctorId)}`,{
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     }
     ).then(response => response.json())
     .then(data => {
@@ -54,6 +55,7 @@ function sendlink(){
         fetch('/booking_doctor/sendlink',{
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({meetingId,meetingLink})
         })
         .then(response => response.json())
@@ -72,6 +74,7 @@ function confirmMeeting(){
         fetch('/booking_doctor/confirm_meeting',{
             method: 'PUT',
             headers: { 'Content-Type' : 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({meetingId:meetingId,action : 'confirm meeting done'})
         })
         .then(response => response.json())
@@ -88,6 +91,7 @@ function confirmMeeting(){
         fetch('/booking_doctor/confirm_meeting',{
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({meetingId:meetingId,action: 'confirm meeting'})
         })
         .then(response => response.json())

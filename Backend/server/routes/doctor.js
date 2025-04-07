@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const Doctor = require('../models/Doctor');
+const  authenticateToken  = require('../routes/main').authenticateToken;
 
+router.use(authenticateToken);
 
 router.get('/',async (req,res) => {
     try{

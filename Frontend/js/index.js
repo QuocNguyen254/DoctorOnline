@@ -15,6 +15,7 @@ function handleLogin(event) {
         if (data.success) {
             window.location.href = data.redirectTo; // Chuyển trang sau khi đăng nhập thành công
             localStorage.setItem('userId',data.userId);
+
         } else {
             console.log(data.message); // Hiển thị lỗi nếu có
         }

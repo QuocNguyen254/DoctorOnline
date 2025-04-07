@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const meetingDate = require('../models/MeetingDate');
 const mongoose = require('mongoose');
+const  authenticateToken  = require('../routes/main').authenticateToken;
+
+router.use(authenticateToken);
 router.get('/',async (req,res) => {
     try{
         const {patientId} = req.query;

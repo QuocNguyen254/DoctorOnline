@@ -4,7 +4,8 @@ const meetingDate = require('../models/MeetingDate');
 const Doctor = require('../models/Doctor');
 const User = require('../models/User');
 const mongoose = require('mongoose');
-
+const  authenticateToken = require('../routes/main').authenticateToken;
+router.use(authenticateToken);
 
 router.get('/',async (req,res) => {
     try{

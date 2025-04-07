@@ -79,7 +79,8 @@ function saveDoctorInfo(id,name,specialty,image,degree){
 } 
 function getDoctors(){
   fetch('/doctor',{
-     method: "GET"
+     method: "GET",
+     credentials: 'include'
     }
   ).then(response => response.json())
   .then(data => {

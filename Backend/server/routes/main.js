@@ -1,12 +1,37 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 const path  = require('path');
 const router = express.Router();
+const cookieParser = require('cookie-parser');
+router.use(bodyParser.json());
+router.use(cookieParser());
+
 const Doctor = require('../models/Doctor');
 const User = require('../models/User');
 const { default: mongoose } = require('mongoose');
 
 
-router.get('/',(req,res) => {
+//Create serect key
+const crypto = require('crypto');
+let secretKey = '';
+
+
+const authenticateToken = (req,res,next) => {
+    const token = req.cookies.token;
+    if (!token){
+        return res.status(401).json({success:false,message:'No token.Access denied'});
+    }
+    jwt.verify(token,secretKey, (err,decoded)=> {
+        if (err){
+            return res.status(403).json({success:false,message:'Token not valid'});
+        }
+        req.user = decoded;
+        next();
+    });
+};
+
+router.get('/', (req,res) => {
     res.sendFile(path.join(__dirname,'../../..//Frontend/public/index.html'));
 });
 
@@ -25,6 +50,17 @@ router.post('/login', async (req,res) => {
         if (!user || user.pass !== upass) {
             return res.status(401).json({ success: false, message: 'Sai tên đăng nhập hoặc mật khẩu!',redirectTo: redirectPath});
         }
+        secretKey = crypto.randomBytes(32).toString('hex');
+
+        const token = jwt.sign({uname},secretKey,{expiresIn:'1h'});
+
+        res.cookie('token', token, {
+            httpOnly: true,  // Ngăn JavaScript truy cập
+            secure: true,    // Chỉ gửi qua HTTPS (tắt khi chạy local)
+            sameSite: 'Strict', // Chống CSRF
+            maxAge: 3600000  // 1 giờ
+        });
+
         // Lưu thông tin user vào session
         // req.session.user_name = user.name;
         // req.session.name = user.name;
@@ -132,6 +168,6 @@ router.post('/login', async (req,res) => {
     //     ]
     // );
 
-module.exports = router ;
-
+    module.exports.router = router;
+    module.exports.authenticateToken = authenticateToken;
 
