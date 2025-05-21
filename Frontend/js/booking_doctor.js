@@ -10,7 +10,9 @@ function showMeetings(){
         if (data){
             let tbody = document.getElementById('rows');
             let tbody_1 = document.getElementById('rows_1');
-            const today = new Date().toISOString().split('T')[0];
+            // const today = new Date().toISOString().split('T')[0];
+            const today = new Date();
+            const todayPart = today.toLocaleDateString('en-CA'); // cũng ở dạng YYYY-MM-DD
             let id_1 = 1;
             for (let i = 0 ;i < data.length;i++){
                 const date = new Date(data[i].meetingTime);
@@ -32,7 +34,7 @@ function showMeetings(){
                     alert('Apointment picked');
                 })(data[i]._id));
                 tbody.appendChild(tr);
-                if (1){ //Giai quyet dieu kien date = today
+                if (datePart === todayPart){ //Giai quyet dieu kien date = today
                     tr_1.innerHTML = `
                     <td><p>${id_1++}</p></td>
                     <td><p>${datePart} | ${timePart}</p></td>
