@@ -1,8 +1,8 @@
-var data, num_row = 20;
+var data, num_row = 30;
 var row_sheet;
 getAllRecord();
 
-const csvUrl = "https://docs.google.com/spreadsheets/d/1vspmThGg-eyWESmkJni8JHg2cARbj6tuPlPB_9E4INI/export?format=csv";
+const csvUrl = "https://docs.google.com/spreadsheets/d/1royxguyMR5ZWGNXp1GarZ0ZDMKnlJtx16aN1dXZdrbk/export?format=csv";
 const interval = 0; //(tần suất cập nhật)
 
 function fetchGoogleSheetData() {
@@ -17,11 +17,12 @@ function fetchGoogleSheetData() {
             console.table(rows); // Hiển thị dưới dạng bảng (nếu trình duyệt hỗ trợ)
             console.log(row_sheet);
             rows.slice(1).forEach((row, index) => {
-                let type = row[0];  // heartrate/spo2
+                let type = row[0];  // heartrate/spo2/temp
                 let date = row[1];  // datetime
                 let value = row[2]; // value
-                if (type && date && value) {
-                    appendDataOnList(index+1, type, date, value, "normal");
+                let status = row[3];
+                if (type && date && value && status) {
+                    appendDataOnList(index+1, type, date, value, status);
                 }
             });
             
