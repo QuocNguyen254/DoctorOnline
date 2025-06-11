@@ -301,6 +301,13 @@ main .deck > div.card-Steps h1 {
     color: var(--color-warning);
 }
 
+main .deck > div.card-Status span {
+    background: #40d845;
+}
+main .deck > div.card-Status h1 {
+    color: #40d845; 
+}
+
 main .deck > div .middle {
     display: flex;
     align-items: center;
